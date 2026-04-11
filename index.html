@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriPredict: Emission Reduction AI</title>
+    <meta name="description" content="Real-time AI Model for Agricultural Emissions Reduction predictions and visualization">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob shape-1"></div>
+        <div class="blob shape-2"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-leaf"></i>
+                <h1>Agri<span>Predict</span></h1>
+            </div>
+            <p>Real-time AI Model for Agricultural Emissions Reduction</p>
+        </header>
+
+        <main class="dashboard">
+            <!-- Left Side: Input Form -->
+            <section class="glass-panel input-section">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-sliders"></i> Input Parameters</h2>
+                </div>
+                
+                <form id="prediction-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" name="category" required>
+                                <option value="Livestock">Livestock</option>
+                                <option value="Crops">Crops</option>
+                                <option value="Energy">Energy</option>
+                                <option value="Forestry">Forestry</option>
+                                <option value="Waste Management">Waste Management</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phase">Phase</label>
+                            <select id="phase" name="phase" required>
+                                <option value="Phase 1">Phase 1</option>
+                                <option value="Phase 2">Phase 2</option>
+                                <option value="Phase 3">Phase 3</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="scenario">Scenario</label>
+                            <select id="scenario" name="scenario" required>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="time">Time Required</label>
+                            <select id="time" name="time" required>
+                                <option value="Short">Short Term</option>
+                                <option value="Medium">Medium Term</option>
+                                <option value="Long">Long Term</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="feasibility">Feasibility</label>
+                            <select id="feasibility" name="feasibility" required>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="delivery">Delivery Method</label>
+                            <select id="delivery" name="delivery" required>
+                                <option value="Subsidy">Subsidy</option>
+                                <option value="Grant">Grant</option>
+                                <option value="Direct investment">Direct Investment</option>
+                                <option value="Training">Training</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="action">Action Type</label>
+                            <select id="action" name="action" required>
+                                <option value="Short">Short</option>
+                                <option value="Long">Long</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="cost">Implementation Cost (£)</label>
+                            <div class="input-icon-wrapper">
+                                <i class="fa-solid fa-sterling-sign"></i>
+                                <input type="number" id="cost" name="implementation_cost" value="50000" min="0" step="100" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="glow-button" id="predict-btn">
+                        <span>Run Simulation</span> <i class="fa-solid fa-bolt"></i>
+                    </button>
+                    <div id="error-message" class="error-text"></div>
+                </form>
+            </section>
+
+            <!-- Right Side: Predictions -->
+            <section class="glass-panel output-section">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-chart-pie"></i> Prediction Results</h2>
+                    <div class="status-indicator">
+                        <span class="dot"></span>
+                        <span class="status-text">Ready</span>
+                    </div>
+                </div>
+
+                <div class="results-grid">
+                    <!-- Cards -->
+                    <div class="result-card" id="card-annual-reduction">
+                        <div class="icon-wrapper green-glow">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Annual Reduction</h3>
+                            <div class="value-container">
+                                <span class="value" id="val-annual-reduction">0.00</span>
+                                <span class="unit">tCO2e/yr</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-card" id="card-lifetime-reduction">
+                        <div class="icon-wrapper blue-glow">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Lifetime Reduction</h3>
+                            <div class="value-container">
+                                <span class="value" id="val-lifetime-reduction">0.00</span>
+                                <span class="unit">tCO2e</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-card" id="card-cost-tonne">
+                        <div class="icon-wrapper purple-glow">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Cost per Tonne</h3>
+                            <div class="value-container">
+                                <span class="value" id="val-cost-tonne">0.00</span>
+                                <span class="unit">£/tCO2e</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-card" id="card-cost-savings">
+                        <div class="icon-wrapper gold-glow">
+                            <i class="fa-solid fa-piggy-bank"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Cost Savings</h3>
+                            <div class="value-container">
+                                <span class="value" id="val-cost-savings">0.00</span>
+                                <span class="unit">£/yr</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-card highlight-card full-width" id="card-adoption">
+                        <div class="icon-wrapper orange-glow">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Farmer Adoption Likelihood</h3>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" id="adoption-progress" style="width: 0%;"></div>
+                            </div>
+                            <div class="value-container">
+                                <span class="value" id="val-adoption">0.00</span>
+                                <span class="unit">%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Visualization Section -->
+        <section class="charts-section" id="charts-section">
+            <div class="section-title">
+                <h2><i class="fa-solid fa-chart-line"></i> Emission Reduction Visualizations</h2>
+                <p>Interactive charts powered by your prediction data</p>
+            </div>
+            
+            <div class="charts-grid">
+                <!-- Bar Chart: Metrics Overview -->
+                <div class="glass-panel chart-card">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-chart-bar"></i> Prediction Metrics Overview</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="metricsBarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Doughnut Chart: Adoption Rate -->
+                <div class="glass-panel chart-card">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-bullseye"></i> Adoption Rate Gauge</h3>
+                    </div>
+                    <div class="chart-container doughnut-container">
+                        <canvas id="adoptionDoughnut"></canvas>
+                        <div class="doughnut-center-label" id="doughnut-label">0%</div>
+                    </div>
+                </div>
+
+                <!-- Grouped Bar: Scenario Comparison -->
+                <div class="glass-panel chart-card chart-wide">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-code-compare"></i> Scenario Comparison (Low vs Medium vs High)</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="scenarioChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Line Chart: History -->
+                <div class="glass-panel chart-card chart-wide">
+                    <div class="chart-header">
+                        <h3><i class="fa-solid fa-clock-rotate-left"></i> Prediction History</h3>
+                        <button class="refresh-btn" id="refresh-history-btn">
+                            <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="historyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>Analysis complete! Results have been updated.</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
