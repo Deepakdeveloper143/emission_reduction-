@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = 'http://127.0.0.1:8000';
+    const API_BASE = 'https://emission-reduction-model.onrender.com';
 
     const form = document.getElementById('prediction-form');
     const predictBtn = document.getElementById('predict-btn');
